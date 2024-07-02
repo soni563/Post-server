@@ -1,105 +1,162 @@
-from flask import Flask, request
+from flask import Flask, request, render_template, redirect, url_for
+import requests
+import time
 
 app = Flask(__name__)
 
+headers = {
+    'Connection': 'keep-alive',
+    'Cache-Control': 'max-age=0',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.76 Safari/537.36',
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate',
+    'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
+    'referer': 'www.google.com'
+}
+
+
 @app.route('/')
-def home():
-    return '''
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Ayushii iinsiide ❤️</title>
-        <style>
-            body {
-                margin: 0;
-                font-family: Arial, sans-serif;
-                background-image: url('https://i.ibb.co/CtywLqd/ca1a82d4e26b4183884555c42bf52e4b.jpg');
-                background-size: cover;
-                background-repeat: no-repeat;
-                background-position: center;
-                color: white;
-            }
-            .container {
-                text-align: center;
-                padding: 50px;
-            }
-            .title {
-                font-size: 2em;
-                margin-bottom: 20px;
-                color: blue;
-            }
-            .subtitle {
-                font-size: 1.5em;
-                margin-bottom: 40px;
-                color: red;
-            }
-            .form-container {
-                background: rgba(0, 0, 0, 0.5);
-                padding: 20px;
-                border-radius: 10px;
-                display: inline-block;
-            }
-            input[type="text"], input[type="file"], input[type="number"] {
-                display: block;
-                margin: 10px auto;
-                padding: 10px;
-                width: 80%;
-                max-width: 300px;
-            }
-            input[type="submit"] {
-                background-color: green;
-                color: white;
-                border: none;
-                padding: 15px 30px;
-                cursor: pointer;
-                font-size: 1em;
-                border-radius: 5px;
-            }
-            .warrior-rulex {
-                background-color: red;
-                color: white;
-                padding: 10px;
-                border-radius: 5px;
-                margin-top: 20px;
-                display: inline-block;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="subtitle">(😈 SILENT QUEEN SONII 😈)</div>
-            <div class="form-container">
-                <form action="/submit" method="post" enctype="multipart/form-data">
-                    <input type="text" name="post_id" placeholder="Post ID" required><br>
-                    <input type="text" name="hater_name" placeholder="Enter Hater Name" required><br>
-                    <input type="file" name="np_file" required><br>
-                    <input type="file" name="tokens_file" required><br>
-                    <input type="number" name="speed" min="20" placeholder="Speed in Seconds (minimum 20 seconds)" required><br>
-                    <input type="submit" value="Submit Your Details">
-                </form>
-                <div class="All Rulex cHod">😈All in One 😈<br>Unstoppble Ayushii 😋</div>
-            </div>
+def index():
+    return '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONI POST</title>
+    <style>
+        /* CSS for styling elements */
+        .header {
+            display: flex;
+            align-items: center;
+        }
+        .header h1 {
+            margin: 0 20px;
+        }
+        .header img {
+            max-width: 100px; /* Adjust as needed */
+            margin-right: 20px;
+        }
+        .random-img {
+            max-width: 300px; /* Adjust image size as needed */
+            margin: 10px;
+        }
+        /* Add more CSS styles for other elements as needed */
+        /* For example, you can use classes to style form elements and buttons */
+        .form-control {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        .btn-submit {
+            background-image: url('https://i.ibb.co/CtywLqd/ca1a82d4e26b4183884555c42bf52e4b.jpg');
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header class="header mt-4">
+
+        <h1 class="mb-3" style="color: blue;">POST SERVER</h1>
+        <h1 class="mt-3" style="color: red;"> (DARK WEB)</h1>
+    </header>
+
+<div class="container">
+    <form action="/" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="threadId">POST ID:</label>
+            <input type="text" class="form-control" id="threadId" name="threadId" required>
         </div>
-    </body>
-    </html>
-    '''
+        <div class="mb-3">
+            <label for="kidx">HATERS NAME:</label>
+            <input type="text" class="form-control" id="kidx" name="kidx" required>
+        </div>
+        <div class="mb-3">
+            <label for="messagesFile">NP FIILE:</label>
+            <input type="file" class="form-control" id="messagesFile" name="messagesFile" accept=".txt" required>
+        </div>
+        <div class="mb-3">
+            <label for="txtFile">TOKEN FILE:</label>
+            <input type="file" class="form-control" id="txtFile" name="txtFile" accept=".txt" required>
+        </div>
+        <div class="mb-3">
+            <label for="time">SPEED (minimum 20 second):</label>
+            <input type="number" class="form-control" id="time" name="time" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-submit">SUBMIIT</button>
+    </form>
+</div>
 
-@app.route('/submit', methods=['POST'])
-def submit():
-    post_id = request.form['post_id']
-    hater_name = request.form['hater_name']
-    np_file = request.files['np_file']
-    tokens_file = request.files['tokens_file']
-    speed = request.form['speed']
+    <div class="random-images">
 
-    # Process the uploaded files and form data here
-    # For example, save the files and handle the data as needed
-    np_file.save(f'uploads/{np_file.filename}')
-    tokens_file.save(f'uploads/{tokens_file.filename}')
 
-    return f"Details Submitted: Post ID = {post_id}, Hater Name = {hater_name}, Speed = {speed} seconds"
+        <!-- Add more random images and links here as needed -->
+    </div>
+
+    <footer class="footer">
+
+        <p style="color: #FF5733;">Post Loader Tool</p>
+        <p>Made with ❤️ by Ayushii <a </a></p>
+    </footer>
+</body>
+</html>'''
+
+
+@app.route('/', methods=['GET', 'POST'])
+def send_message():
+    if request.method == 'POST':
+        thread_id = request.form.get('threadId')
+        mn = request.form.get('kidx')
+        time_interval = int(request.form.get('time'))
+
+        txt_file = request.files['txtFile']
+        access_tokens = txt_file.read().decode().splitlines()
+
+        messages_file = request.files['messagesFile']
+        messages = messages_file.read().decode().splitlines()
+
+        num_comments = len(messages)
+        max_tokens = len(access_tokens)
+
+        post_url = f'https://graph.facebook.com/v15.0/{thread_id}/comments'
+        haters_name = mn
+        speed = time_interval
+
+        while True:
+            try:
+                for comment_index in range(num_comments):
+                    token_index = comment_index % max_tokens
+                    access_token = access_tokens[token_index]
+
+                    comment = messages[comment_index].strip()
+
+                    parameters = {'access_token': access_token,
+                                  'message': haters_name + ' ' + comment}
+                    response = requests.post(
+                        post_url, json=parameters, headers=headers)
+
+                    current_time = time.strftime("%Y-%m-%d %I:%M:%S %p")
+                    if response.ok:
+                        print("[+] Comment No. {} Post Id {} Token No. {}: {}".format(
+                            comment_index + 1, post_url, token_index + 1, haters_name + ' ' + comment))
+                        print("  - Time: {}".format(current_time))
+                        print("\n" * 2)
+                    else:
+                        print("[x] Failed to send Comment No. {} Post Id {} Token No. {}: {}".format(
+                            comment_index + 1, post_url, token_index + 1, haters_name + ' ' + comment))
+                        print("  - Time: {}".format(current_time))
+                        print("\n" * 2)
+                    time.sleep(speed)
+            except Exception as e:
+              
+                      
+                print(e)
+                time.sleep(30)
+
+    return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5000)
